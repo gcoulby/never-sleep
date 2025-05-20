@@ -33,15 +33,6 @@
   </head>
   <body class="bg-black text-white">
     <div class="relative w-full h-full">
-      <!-- Background image
-      <img
-        src="https://picsum.photos/1920/1080?blur"
-
-        alt="Lockscreen Background"
-        class="absolute brightness-75 w-full h-full object-cover"
-      /> -->
-
-      <div id="img-placeholder" class="absolute w-full h-full"></div>
 
       <div class="relative bg-black opacity-80 w-full h-full"></div>
 
@@ -56,20 +47,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <script>
-      function hasNoImageParam() {
-        const params = new URLSearchParams(window.location.search);
-        return params.has('no-image');
-      }
-
-      if (!hasNoImageParam()) {
-        const placeholder = document.getElementById('img-placeholder');
-        const img = document.createElement('img');
-        img.src = "https://picsum.photos/1920/1080?blur";
-        img.alt = "Lockscreen Background";
-        img.className = "absolute brightness-75 w-full h-full object-cover";
-        placeholder.replaceWith(img);
-      }
-
       function updateTime() {
         const now = new Date();
         const timeOptions = { hour: 'numeric', minute: '2-digit' };
