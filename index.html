@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Never Sleep" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <meta property="og:url" content="https://gcoulby.github.io/never-sleep/" />
+    <meta property="og:title" content="Ironsworn Companion" />
+    <meta
+      property="og:description"
+      content="App the stops you computer from sleeping."
+    />
+    <meta
+      property="og:image"
+      content="https://gcoulby.github.io/never-sleep/apple-touch-icon.png"
+    />
+    <link
+      href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body, html {
+        height: 100%;
+        margin: 0;
+        font-family: system-ui, sans-serif;
+      }
+    </style>
+  </head>
+  <body class="bg-black text-white">
+    <div class="relative w-full h-full">
+      <!-- Background image -->
+      <img
+        src="https://picsum.photos/1920/1080?blur"
+
+        alt="Lockscreen Background"
+        class="absolute brightness-75 w-full h-full object-cover"
+      />
+
+      <div class="relative bg-black opacity-80 w-full h-full"></div>
+
+      <!-- Centered Time and Date -->
+      <div class="absolute inset-0 flex flex-col justify-center items-center text-center">
+        <div id="time" class="drop-shadow-lg mb-2 font-semibold text-6xl"></div>
+        <div id="date" class="drop-shadow-md text-xl"></div>
+        <p class="bottom-5 absolute text-xs italic">Keep this tab in the foreground to prevent your computer from sleeping</p>
+      </div>
+    </div>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+      function updateTime() {
+        const now = new Date();
+        const timeOptions = { hour: 'numeric', minute: '2-digit' };
+        const dateOptions = { weekday: 'long', month: 'long', day: 'numeric' };
+
+        document.getElementById('time').textContent = now.toLocaleTimeString([], timeOptions);
+        document.getElementById('date').textContent = now.toLocaleDateString([], dateOptions);
+      }
+
+      updateTime();
+      setInterval(updateTime, 1000);
+
+
+      async function requestWakeLock() {
+        try {
+          wakeLock = await navigator.wakeLock.request("screen");
+          console.log("Wake lock active");
+        } catch (err) {
+          console.error(`${err.name}, ${err.message}`);
+        }
+      }
+
+      requestWakeLock();
+    </script>
+  </body>
+</html>
