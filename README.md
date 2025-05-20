@@ -4,3 +4,7 @@ This is just a nice looking page that stops your computer going to sleep. The us
 
 
 Go to [https://gcoulby.github.io/never-sleep/](https://gcoulby.github.io/never-sleep/) and keep the tab in the foreground when switching over the KVM. 
+
+
+
+Go to [https://gcoulby.github.io/never-sleep/?no-image](https://gcoulby.github.io/never-sleep/?no-image) to disable the background image fetching.
