@@ -11,20 +11,12 @@
 
     <meta property="og:url" content="https://gcoulby.github.io/never-sleep/" />
     <meta property="og:title" content="Ironsworn Companion" />
-    <meta
-      property="og:description"
-      content="App the stops you computer from sleeping."
-    />
-    <meta
-      property="og:image"
-      content="https://gcoulby.github.io/never-sleep/apple-touch-icon.png"
-    />
-    <link
-      href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
-      rel="stylesheet"
-    />
+    <meta property="og:description" content="App the stops you computer from sleeping." />
+    <meta property="og:image" content="https://gcoulby.github.io/never-sleep/apple-touch-icon.png" />
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet" />
     <style>
-      body, html {
+      body,
+      html {
         height: 100%;
         margin: 0;
         font-family: system-ui, sans-serif;
@@ -49,7 +41,7 @@
       <div class="absolute inset-0 flex flex-col justify-center items-center text-center">
         <div id="time" class="drop-shadow-lg mb-2 font-semibold text-6xl"></div>
         <div id="date" class="drop-shadow-md text-xl"></div>
-        <p class="bottom-5 absolute text-xs italic">Keep this tab in the foreground to prevent your computer from sleeping</p>
+        <p class="bottom-5 absolute text-xs italic" id="status">Active</p>
       </div>
     </div>
 
@@ -57,42 +49,56 @@
 
     <script>
       function hasNoImageParam() {
-        const params = new URLSearchParams(window.location.search);
-        return params.has('no-image');
+        const params = new URLSearchParams(window.location.search)
+        return params.has('no-image')
       }
 
       if (!hasNoImageParam()) {
-        const placeholder = document.getElementById('img-placeholder');
-        const img = document.createElement('img');
-        img.src = "https://picsum.photos/1920/1080?blur";
-        img.alt = "Lockscreen Background";
-        img.className = "absolute brightness-75 w-full h-full object-cover";
-        placeholder.replaceWith(img);
+        const placeholder = document.getElementById('img-placeholder')
+        const img = document.createElement('img')
+        img.src = 'https://picsum.photos/1920/1080?blur'
+        img.alt = 'Lockscreen Background'
+        img.className = 'absolute brightness-75 w-full h-full object-cover'
+        placeholder.replaceWith(img)
       }
 
       function updateTime() {
-        const now = new Date();
-        const timeOptions = { hour: 'numeric', minute: '2-digit' };
-        const dateOptions = { weekday: 'long', month: 'long', day: 'numeric' };
+        const now = new Date()
+        const timeOptions = { hour: 'numeric', minute: '2-digit' }
+        const dateOptions = { weekday: 'long', month: 'long', day: 'numeric' }
 
-        document.getElementById('time').textContent = now.toLocaleTimeString([], timeOptions);
-        document.getElementById('date').textContent = now.toLocaleDateString([], dateOptions);
+        document.getElementById('time').textContent = now.toLocaleTimeString([], timeOptions)
+        document.getElementById('date').textContent = now.toLocaleDateString([], dateOptions)
       }
 
-      updateTime();
-      setInterval(updateTime, 1000);
+      updateTime()
+      setInterval(updateTime, 1000)
 
+      let wakeLock = null
+      let el = document.getElementById('status')
 
       async function requestWakeLock() {
         try {
-          wakeLock = await navigator.wakeLock.request("screen");
-          console.log("Wake lock active");
+          wakeLock = await navigator.wakeLock.request('screen')
+          console.log('Wake lock active')
+          el.innerText = 'Active'
+
+          wakeLock.addEventListener('release', () => {
+            console.log('Wake lock released')
+            el.innerText = 'Inactive'
+          })
         } catch (err) {
-          console.error(`${err.name}, ${err.message}`);
+          console.error(`${err.name}, ${err.message}`)
         }
       }
 
-      requestWakeLock();
+      requestWakeLock()
+
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+          requestWakeLock()
+        }
+      })
     </script>
   </body>
 </html>
